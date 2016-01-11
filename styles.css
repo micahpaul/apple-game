@@ -1,0 +1,24 @@
+
+/* 
+   This is for the setup area
+*/ 
+#setupArea {
+  margin-top: 10px;   /* add a margin to look nice */
+  max-height: 150px;  /* make sure that the box doesn't get too big */
+  height : 150px;     /* even if the text is big */
+}
+
+#canvasArea {
+  margin-top: 10px;
+}
+
+canvas {
+	border:0px;
+	max-width:100%; 
+	max-height:100%;
+}
+
+image {
+	max-width:100%;
+	height:auto;
+}

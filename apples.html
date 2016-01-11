@@ -1,0 +1,166 @@
+<html>
+    <head>
+    <title>The Apple Game</title>
+
+    <!-- include jquery, bootstrap, and our stylesheet -->
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href="bootstrap.css"
+          />
+
+    <link rel="stylesheet"
+          type="text/css"
+          href="styles.css"
+          />	
+
+    </head>
+    <body>
+        
+    <div class="container">
+        <!-- 
+             1 row; we will have 2 columns.
+        -->
+        <div class="row">
+            <!--
+                Column 1 contains the input / setup box
+            -->
+            <div class="col-md-3">
+                <!--
+                    SetupArea is for my use
+                -->
+                <div id="setupArea">
+                    <!--<button type="button" onclick="apple1.fall();apple2.fall();">Activate Gravity</button>
+                    <button type="button" onclick="apple1.x=200;apple1.y=200;apple2.x=152;apple2.y=152;">Replace Apple</button>-->
+                </div>
+            </div>
+
+            <!-- 
+                Column 2 contains the game content
+            -->
+            <div class="col-md-9">
+                <!--
+                    canvasArea is for my use
+                -->
+                <div id="canvasArea">
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <script>
+        /* global constant variables */
+        var treeWidth = 800;
+        var treeHeight = 600;
+        var appleSide = 50; /* square image - 50 x 50 */
+        var canvasName = "gameBoard";
+        var gravity = 7;
+        var updateFreq = 30;
+
+        /* Initialize */
+        
+        /* create the canvas */
+        $("#canvasArea").html( "<canvas id=\"" + canvasName + "\"  width=\"" + treeWidth + "\" height=\"" 
+                                + treeHeight + "\">Your browser does not support the HTML5 canvas tag.</canvas>" );
+
+        function drawImg( x, y, width, height, name ) { 
+            var c   = document.getElementById(canvasName);
+            var ctx = c.getContext("2d");
+            var img = new Image( width, height);
+            
+            img.onload = function() {
+                ctx.drawImage(img,x,y);
+            };
+
+            img.src = name;
+        };
+
+        function clearCanvas() { 
+            var c   = document.getElementById(canvasName);
+            var ctx = c.getContext("2d");
+            ctx.clearRect(0, 0, c.width, c.height);
+        };
+
+        function drawTree() {
+            drawImg( 0, 0, treeWidth, treeHeight, 'tree.png' );
+        };
+
+        /* Apple Class */
+        var Apple = function( x, y ) {
+            this.x = x;
+            this.y = y;
+            this.speed = 0;
+        };
+        
+        Apple.prototype.fall = function() {
+            this.speed = gravity;
+        };
+        
+        Apple.prototype.stop = function() {
+            this.speed = 0;
+        };
+        
+        Apple.prototype.update = function() {
+            if( this.y >= treeHeight - 85 )
+            {
+                this.stop();
+            }
+
+            this.y = this.speed;
+        };
+        
+        Apple.prototype.draw = function() {
+            drawImg( this.x, this.y, appleSide, appleSide, 'apple.png' );
+        };
+
+        Apple.prototype.overlap = function( x, y ) {
+            return x < this.x + appleSide &&
+                   x + appleSide > this.x &&
+                   y < this.y + appleSide &&
+                   y + appleSide > this.y ;
+        };
+
+        var appleList = [new Apple( 200, 200 ), new Apple( 600, 400 )];
+
+        function updateAll() {
+            /*update positions */
+            
+            /* redraw in order */
+            drawTree();
+
+            for (i=0; appleList.length ;i++)
+            {
+                
+                appleList[i].draw();
+            }
+        };
+
+
+        /* Game Flow */
+
+        /* background */
+
+        updateAll();
+
+        /* to do: add game states: addApples, removeApples, playGame, endGame */
+        /* to do: onclick for bg img: add apple at x,y if gamestate is setup */
+        /* to do: validate clickable location for adding (on tree, not too close to other apples */
+  
+/*
+        var apple1 = new Apple( 200, 200 );
+        var apple2 = new Apple( 600, 400 );
+
+        apple1.draw(); 
+        apple2.draw(); 
+*/
+
+        /*console.log( apple1.overlap( apple2.x, apple2.y ) );
+
+        setInterval( updateAll, updateFreq );
+        */
+
+
+    </script>
+    </body>
+</html>
